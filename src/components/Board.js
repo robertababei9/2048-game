@@ -60,7 +60,7 @@ export default function BoardView() {
     })
     
 
-    const tiles = board.tiles.filter(tile => tile.value != 0)
+    const tiles = board.tiles.filter(tile => tile.value !== 0)
                     .map((tile, index) => <Tile key={index} tile={tile}/>);
 
     // console.log("board = ", board);
