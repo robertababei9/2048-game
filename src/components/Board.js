@@ -4,6 +4,14 @@ import Cell from './Cell';
 import Tile from './Tile';
 import { Board } from '../helpers'
 import useEvent from '../customHooks/useEvent';
+import { useSwipeable } from 'react-swipeable';
+
+const Direction = {
+    Left: 37,
+    Up: 38,
+    Right:  39,
+    Down: 40
+}
 
 
 
@@ -12,10 +20,11 @@ export default function BoardView() {
     const [board, setBoard] = useState(new Board());
 
     const handleKeyDown = (event) => {
+        console.log("here -> board.hasWon() = ", board.hasWon())
         if (board.hasWon()) {
             return
         }
-
+        console.log("event = ", event)
         if (event.keyCode >= 37 && event.keyCode <= 40) {
             let direction = event.keyCode - 37; // 0, 1, 2, 3
             let boardClone = Object.assign(
@@ -27,6 +36,14 @@ export default function BoardView() {
         }
     }
     useEvent('keydown', handleKeyDown);
+
+    const handlers = useSwipeable({
+        onSwiped: (eventData) => {
+            const tempEvent = {keyCode: Direction[eventData.dir]}
+
+            handleKeyDown(tempEvent)
+        },
+      });
 
     const resetGame = () => {
          setBoard(new Board());
@@ -53,7 +70,7 @@ export default function BoardView() {
     
 
     return (
-        <div>
+        <div >
             <div className='details-box'>
                 <div className='resetButton' onClick={resetGame}>New Game</div>
                 <div className='score-box'>
@@ -62,10 +79,11 @@ export default function BoardView() {
 
                 </div>
             </div>
-            <div className='board'>
+            <div className='board' {...handlers}>
                 {cells}
                 {tiles}
                 <GameOverlay onRestart={resetGame} board={board}/>
+
             </div>
         </div>
     )
