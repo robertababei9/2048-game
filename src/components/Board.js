@@ -20,11 +20,10 @@ export default function BoardView() {
     const [board, setBoard] = useState(new Board());
 
     const handleKeyDown = (event) => {
-        console.log("here -> board.hasWon() = ", board.hasWon())
         if (board.hasWon()) {
             return
         }
-        console.log("event = ", event)
+        
         if (event.keyCode >= 37 && event.keyCode <= 40) {
             let direction = event.keyCode - 37; // 0, 1, 2, 3
             let boardClone = Object.assign(
